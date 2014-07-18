@@ -63,7 +63,7 @@ var check = function(len, list){
     });
 }
 
-var tasks = [pallarel1().delay(1), pallarel2().delay(1), pallarel3().delay(1), concurrent().delay(1)];
+var tasks = [pallarel1().delay(Math.random()*1000), pallarel2().delay(Math.random()*1000), pallarel3().delay(Math.random()*1000), concurrent().delay(Math.random()*1000)];
 Promise.all(tasks)
     .catch(function(err){ console.log(err); })
     .done(function(data){ check(tasks.length, data); });

@@ -42,11 +42,30 @@ var concurrent = function(){
     var tasks = [];
     tasks.push(function(){return fileread(__filename, 'utf-8')});
     tasks.push(function(){return fileread('./package.json', 'utf-8')});
-    return tasks.reduce(function(promise){
-        return promise();
+    return tasks.reduce(function(seq, item){
+        return seq.then(function(r){
+            return item().then(function(data){ r.push(data); return r;});
+        });
+    }, Promise.resolve([]));
+}
+var assert = require('assert');
+var check = function(len, list){
+    var files = {};
+    files[__filename] =  1;
+    files['./package.json'] = 1;
+    
+    assert(len === list.length)
+    list.forEach(function(items){
+        assert(items.length === Object.keys(files).length)
+        items.forEach(function(item){
+            assert(files[item.name]);
+        });
     });
 }
-Promise.all([pallarel1().delay(1), pallarel2().delay(1), pallarel3().delay(1), concurrent().delay(1)])
+
+var tasks = [pallarel1().delay(1), pallarel2().delay(1), pallarel3().delay(1), concurrent().delay(1)];
+Promise.all(tasks)
     .catch(function(err){ console.log(err); })
-    .done(function(data){ console.log('num:', data.length); });
+    .done(function(data){ check(tasks.length, data); });
+
 

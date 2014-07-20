@@ -61,11 +61,16 @@ var check = function(len, list){
             assert(files[item.name]);
         });
     });
+    return null;
 }
 
-var tasks = [pallarel1().delay(Math.random()*1000), pallarel2().delay(Math.random()*1000), pallarel3().delay(Math.random()*1000), concurrent().delay(Math.random()*1000)];
-Promise.all(tasks)
-    .catch(function(err){ console.log(err); })
-    .done(function(data){ check(tasks.length, data); });
+var main = function(cb){
+    var tasks = [pallarel1().delay(Math.random()*1000), pallarel2().delay(Math.random()*1000), pallarel3().delay(Math.random()*1000), concurrent().delay(Math.random()*1000)];
+    Promise.all(tasks)
+        .catch(function(err){ console.log(err); })
+        .done(function(data){ check(tasks.length, data); })
+    ;
+}
 
+main();
 

@@ -19,6 +19,11 @@ d.run(function(){
     })
     .catch(function (data) {
         console.log('catch');
+        return "{}";
+    })
+    .then(function (data) {
+        console.log('then3');
+        console.log(data);
     })
     .done(function (data) {
         console.log('done a');
